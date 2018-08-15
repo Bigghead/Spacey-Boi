@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import './Pages/Homepage/homepage.dart';
 
-void main() => runApp(new MyApp());
+void main() {
+  debugPaintSizeEnabled=true;
+  runApp(new MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../../keys.dart';
+import './fake_data.dart';
 
 
 class DailyPic extends StatefulWidget {
@@ -25,7 +26,8 @@ class _DailyPicState extends State<DailyPic> {
 
   @override
   initState(){
-    _getDailyData();
+    // _getDailyData();
+    _dailyData = fakeData;
     super.initState();
   }
 
@@ -46,11 +48,25 @@ class _DailyPicState extends State<DailyPic> {
     Widget build(BuildContext context) {
       // TODO: implement build
       return Container(
-        // constraints: BoxConstraints(maxHeight: 500.0),
         child: _dailyData['url'] != null 
-            ? Image(
-              fit: BoxFit.cover,
-              image: NetworkImage(_dailyData['url'])
+            ? Column(
+              children: <Widget>[
+                Expanded(
+                  child: Image(
+                    fit: BoxFit.fitHeight,
+                    image: NetworkImage(_dailyData['url'])
+                  ),
+                ),
+                Container(
+                  alignment: AlignmentDirectional.center,
+                  width: MediaQuery.of(context).size.width,
+                  // color: Colors.grey,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.9)
+                  ),
+                  child: Text('Gallery', style: TextStyle(color: Colors.white),),
+                )
+              ],
             )
             : Text('Meep')
       );

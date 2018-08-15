@@ -19,8 +19,10 @@ class HomePage extends StatelessWidget {
         ),
         body: Column(
           children: <Widget>[
-              Expanded( child: DailyPic(),),
-              Row(
+              Flexible( flex: 2, child: DailyPic(),),
+              Flexible(
+                flex: 1,
+                child:Row(
                 children: <Widget>[
                   Expanded(
                     child: DailyPic(),
@@ -29,7 +31,7 @@ class HomePage extends StatelessWidget {
                     child: DailyPic(),
                   )
                 ],
-              )
+              )),
              
           ],
         )
