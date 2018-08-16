@@ -49,7 +49,7 @@ class _DailyPicState extends State<DailyPic> {
         _url = 'https://api.nasa.gov/planetary/apod?date=${_getPicture(1)}&api_key=${api_key}';
         return;
       case 'random':
-        _url = 'https://api.nasa.gov/planetary/apod?date=${_getPicture(8)}&api_key=${api_key}';
+        _url = 'https://api.nasa.gov/planetary/apod?date=${_getPicture(Random().nextInt(365))}&api_key=${api_key}';
     }
     super.initState();
   }
