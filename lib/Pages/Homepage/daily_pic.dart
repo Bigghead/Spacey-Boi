@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
+import '../Infopage/info_page.dart';
+
 import '../../keys.dart';
 import './fake_data.dart';
 
@@ -26,11 +28,6 @@ class DailyPic extends StatefulWidget {
 
 
 class _DailyPicState extends State<DailyPic> {
-
-  // final Map _url = {
-  //   'daily': 'https://api.nasa.gov/planetary/apod?api_key=${api_key}',
-  //   'gallery': 'https://api.nasa.gov/planetary/apod?date=${_getYesterdayDate()}api_key=${api_key}'
-  // };
 
   String _url = '';
   Map _dailyData = {};
@@ -57,6 +54,7 @@ class _DailyPicState extends State<DailyPic> {
     super.initState();
   }
 
+
   String _getPicture( int day) {
     var now = new DateTime.now();
     var yesterday = DateTime(now.year, now.month, now.day - (day) );
@@ -65,6 +63,7 @@ class _DailyPicState extends State<DailyPic> {
     print(formattedDate);
     return formattedDate;
   }
+
 
   Future<Null> _getDailyData() async {
 
@@ -79,16 +78,24 @@ class _DailyPicState extends State<DailyPic> {
     } catch(e) { print(e); }
   }
 
+
   Widget _showImage( String mediaType ) {
-    if( mediaType == 'image' ) {
-      return FadeInImage(
-        placeholder: AssetImage('assets/loading.gif'),
-        fit: BoxFit.fitHeight,
-        image: NetworkImage(_dailyData['url'])
-      );
-    } 
-    return Image( image: NetworkImage('https://imgplaceholder.com/420x320/ffffff/000000?text=Video+Image'),);
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(
+          builder: ( BuildContext context ) => InfoPage(apodInfo: _dailyData,)
+        ));
+      },
+      child: mediaType == 'image' 
+          ? FadeInImage(
+            placeholder: AssetImage('assets/loading.gif'),
+            fit: BoxFit.fitHeight,
+            image: NetworkImage(_dailyData['url'])
+          )
+          : Image( image: NetworkImage('https://imgplaceholder.com/420x320/ffffff/000000?text=Video+Image'),)
+    );
   }
+
 
   @override
     Widget build(BuildContext context) {
