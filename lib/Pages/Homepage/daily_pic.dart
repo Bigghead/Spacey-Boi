@@ -62,6 +62,7 @@ class _DailyPicState extends State<DailyPic> {
     var yesterday = DateTime(now.year, now.month, now.day - (day) );
     var formatter = new DateFormat('yyyy-MM-dd');
     String formattedDate = formatter.format(yesterday);
+    print(formattedDate);
     return formattedDate;
   }
 
@@ -78,6 +79,17 @@ class _DailyPicState extends State<DailyPic> {
     } catch(e) { print(e); }
   }
 
+  Widget _showImage( String mediaType ) {
+    if( mediaType == 'image' ) {
+      return FadeInImage(
+        placeholder: AssetImage('assets/loading.gif'),
+        fit: BoxFit.fitHeight,
+        image: NetworkImage(_dailyData['url'])
+      );
+    } 
+    return Image( image: NetworkImage('https://imgplaceholder.com/420x320/ffffff/000000?text=Video+Image'),);
+  }
+
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
@@ -86,13 +98,9 @@ class _DailyPicState extends State<DailyPic> {
               children: <Widget>[
                 Expanded(
                   child: _dailyData['url'] != null
-                        ? FadeInImage(
-                          placeholder: NetworkImage('https://imgplaceholder.com/420x320/fbf3f3/333333/fa-image'),
-                          fit: BoxFit.fitHeight,
-                          image: NetworkImage(_dailyData['url'])
-                        )
+                        ? _showImage(_dailyData['media_type'])
                         : Image(
-                          image: NetworkImage('https://imgplaceholder.com/420x320/fbf3f3/333333/fa-image'),
+                          image: AssetImage('assets/loading.gif'),
                         )
                 ),
                 Container(
