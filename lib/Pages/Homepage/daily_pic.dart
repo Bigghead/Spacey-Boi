@@ -4,12 +4,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 
 import '../Infopage/info_page.dart';
+import '../GalleryViewPage/gallery_view_page.dart';
 
 import '../../keys.dart';
 import './fake_data.dart';
+import '../../utils.dart';
 
 
 class DailyPic extends StatefulWidget {
@@ -46,22 +47,12 @@ class _DailyPicState extends State<DailyPic> {
         _url = 'https://api.nasa.gov/planetary/apod?api_key=${api_key}';
         return;
       case 'gallery':
-        _url = 'https://api.nasa.gov/planetary/apod?date=${_getPicture(1)}&api_key=${api_key}';
+        _url = 'https://api.nasa.gov/planetary/apod?date=${getDate(1)}&api_key=${api_key}';
         return;
       case 'random':
-        _url = 'https://api.nasa.gov/planetary/apod?date=${_getPicture(Random().nextInt(365))}&api_key=${api_key}';
+        _url = 'https://api.nasa.gov/planetary/apod?date=${getDate(Random().nextInt(365))}&api_key=${api_key}';
     }
     super.initState();
-  }
-
-
-  String _getPicture( int day) {
-    var now = new DateTime.now();
-    var yesterday = DateTime(now.year, now.month, now.day - (day) );
-    var formatter = new DateFormat('yyyy-MM-dd');
-    String formattedDate = formatter.format(yesterday);
-    print(formattedDate);
-    return formattedDate;
   }
 
 
@@ -83,7 +74,11 @@ class _DailyPicState extends State<DailyPic> {
     return GestureDetector(
       onTap: () {
         Navigator.push(context, MaterialPageRoute(
-          builder: ( BuildContext context ) => InfoPage(apodInfo: _dailyData,)
+          builder: ( BuildContext context ) {
+            return _pictureType != 'gallery' 
+              ? InfoPage(apodInfo: _dailyData,)
+              : GalleryViewPage();
+          }
         ));
       },
       child: mediaType == 'image' 
