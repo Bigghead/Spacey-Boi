@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../UI/side_drawer.dart';
+
 import '../../utils.dart';
 
 
@@ -29,6 +31,12 @@ class _GalleryState extends State<GalleryViewPage> {
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
-      return Text('hello');
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.black.withOpacity(0.85),
+        ),
+        drawer: SideDrawer(),
+        body: Center(child: Text('Meep'),),
+      );
     }
 }

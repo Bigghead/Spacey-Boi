@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './daily_pic.dart';
+import '../../UI/side_drawer.dart';
 
 class HomePage extends StatelessWidget {
 
@@ -9,14 +10,9 @@ class HomePage extends StatelessWidget {
       // TODO: implement build
       return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.black.withOpacity(0.85),
         ),
-        drawer: Drawer(
-          child: Column(
-            children: <Widget>[
-              Text('Hello Again')
-            ],
-          ),
-        ),
+        drawer: SideDrawer(),
         body: Column(
           children: <Widget>[
               Flexible( flex: 2, child: DailyPic(widgetText: 'Picture of the day', pictureType: 'daily',),),

@@ -42,7 +42,13 @@ class _DailyPicState extends State<DailyPic> {
     // _dailyData   = fakeData;
     _widgetText  = widget.widgetText;
     _pictureType = widget.pictureType;
-    switch( _pictureType ) {
+    _setUrl();
+    super.initState();
+  }
+
+
+  void _setUrl() {
+     switch( _pictureType ) {
       case 'daily':
         _url = 'https://api.nasa.gov/planetary/apod?api_key=${api_key}';
         return;
@@ -51,8 +57,8 @@ class _DailyPicState extends State<DailyPic> {
         return;
       case 'random':
         _url = 'https://api.nasa.gov/planetary/apod?date=${getDate(Random().nextInt(365))}&api_key=${api_key}';
+        return;
     }
-    super.initState();
   }
 
 

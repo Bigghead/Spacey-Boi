@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
+import '../../UI/side_drawer.dart';
 
 class InfoPage extends StatelessWidget {
 
@@ -44,14 +44,9 @@ class InfoPage extends StatelessWidget {
       // TODO: implement build
       return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.black.withOpacity(0.85),
         ),
-        drawer: Drawer(
-          child: Column(
-            children: <Widget>[
-              Text('Hello Again')
-            ],
-          ),
-        ),
+        drawer: SideDrawer(),
         body: Center(
           child: ListView(
             children: <Widget>[
