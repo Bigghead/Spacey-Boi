@@ -90,8 +90,11 @@ class _DailyPicState extends State<DailyPic> {
       child: mediaType == 'image' 
           ? FadeInImage(
             placeholder: AssetImage('assets/loading.gif'),
-            fit: BoxFit.fitHeight,
-            image: NetworkImage(_dailyData['url'])
+            fit: BoxFit.cover,
+            image: NetworkImage(_dailyData['url']),
+            height: double.infinity,
+            width: double.infinity,
+            // alignment: Alignment.center,
           )
           : Image( image: NetworkImage('https://imgplaceholder.com/420x320/ffffff/000000?text=Video+Image'),)
     );
@@ -114,11 +117,16 @@ class _DailyPicState extends State<DailyPic> {
                 Container(
                   alignment: AlignmentDirectional.center,
                   width: MediaQuery.of(context).size.width,
+                  height: 30.0,
                   // color: Colors.grey,
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.9)
                   ),
-                  child: Text(_widgetText, style: TextStyle(color: Colors.white),),
+                  child: Text(_widgetText, style: TextStyle(
+                    color: Colors.white, fontSize: 20.0,
+                    fontFamily: 'Merriweather'
+                    ),
+                  ),
                 )
               ],
             )
