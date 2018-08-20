@@ -3,6 +3,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:cached_network_image/cached_network_image.dart';
+
 
 import '../../UI/side_drawer.dart';
 
@@ -27,7 +29,6 @@ class _GalleryState extends State<GalleryViewPage> {
     void initState() {
       // TODO: implement initState
       _getDates();
-      print(dates);
       super.initState();
     }
 
@@ -61,7 +62,7 @@ class _GalleryState extends State<GalleryViewPage> {
                   ? FadeInImage(
                     placeholder: AssetImage('assets/loading.gif'),
                     fit: BoxFit.cover,
-                    image: NetworkImage(snapshot.data['url']),
+                    image: CachedNetworkImageProvider(snapshot.data['url']),
                     height: double.infinity,
                     width: double.infinity,
                     // alignment: Alignment.center,
@@ -84,12 +85,17 @@ class _GalleryState extends State<GalleryViewPage> {
         drawer: SideDrawer(),
         body: dates.length == 0 
             ? Center(child: Image(image: AssetImage('assets/loading.gif'),),)
-            : ListView.builder(
-              itemCount: dates.length,
-              itemBuilder: ( BuildContext context, int index ) {
-                return _buildAsyncListView(dates[index]);
-              },
-        ),
+            : Container(
+              decoration: BoxDecoration(
+                color: Colors.black
+              ),
+              child: ListView.builder(
+                itemCount: dates.length,
+                itemBuilder: ( BuildContext context, int index ) {
+                  return _buildAsyncListView(dates[index]);
+                },
+              ),
+            ),
       );
     }
 }

@@ -9,7 +9,6 @@ import '../Infopage/info_page.dart';
 import '../GalleryViewPage/gallery_view_page.dart';
 
 import '../../keys.dart';
-import './fake_data.dart';
 import '../../utils.dart';
 
 
