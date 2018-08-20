@@ -3,18 +3,28 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
 import '../../UI/side_drawer.dart';
 
 class InfoPage extends StatelessWidget {
 
-  final Map<String, dynamic> apodInfo;
+  final Map<dynamic, dynamic> apodInfo;
 
   InfoPage( { @required this.apodInfo } );
 
 
-  Widget _showMediaType( String media ) {
+  Widget _showMediaType( String media, BuildContext context ) {
     if( media == 'image' ) {
-      return Image(image: NetworkImage(apodInfo['url']));
+      return Container(
+        height: MediaQuery.of(context).size.height * 0.5,
+        width: MediaQuery.of(context).size.width,
+        child: Image(
+          image: NetworkImage(apodInfo['url']),
+          fit: BoxFit.cover,
+          height: double.infinity,
+          width: double.infinity,
+          ),
+      );
     } else {
       return Column(
         children: <Widget>[
@@ -61,7 +71,7 @@ class InfoPage extends StatelessWidget {
                   apodInfo['copyright'] != null ? Text(apodInfo['copyright']) : Text(''),
                 ],
               ),
-              _showMediaType(apodInfo['media_type']),
+              _showMediaType(apodInfo['media_type'], context),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 20.0),
                 padding: EdgeInsets.symmetric(horizontal: 15.0),

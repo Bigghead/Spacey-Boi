@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:scoped_model/scoped_model.dart';
+
+import './Store/gallery_image_store.dart';
 
 import './Pages/Homepage/homepage.dart';
 
@@ -12,10 +15,12 @@ class MyApp extends StatelessWidget {
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
-      return MaterialApp(
+      return ScopedModel<GalleryData>(
+        model: GalleryData(),
+        child: MaterialApp(
         routes: {
           '/': ( BuildContext context ) => HomePage(),
         },
-      );
+      ),);
     }
 }
