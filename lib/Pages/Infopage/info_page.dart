@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
+import '../FullsizePage/fullsize_page.dart';
 
 import '../../UI/side_drawer.dart';
 
@@ -13,8 +16,38 @@ class InfoPage extends StatelessWidget {
   InfoPage( { @required this.apodInfo } );
 
 
-  Widget _showMediaType( String media, BuildContext context ) {
-    if( media == 'image' ) {
+  void _requestDownload( String url ) async {
+
+    var dirPath = await _findLocalPath();
+
+    final taskId = await FlutterDownloader.enqueue(
+      url: url,
+      savedDir: dirPath,
+      showNotification: true,
+      clickToOpenDownloadedFile: true
+    );
+  }
+
+
+  Future<String> _findLocalPath() async {
+    final directory = await getApplicationDocumentsDirectory();
+    return directory.path;
+  }
+
+
+  // _saveDocuments( String path) {
+  //   final file = new File('$path/tasks.json');
+  //   final fileExisted = file.existsSync();
+  //   if (!fileExisted) {
+  //     file.createSync();
+  //   }
+  //   file.writeAsStringSync(json.encode(_tasks));
+  // }
+  
+
+
+  Widget _showMediaType( Map apodInfo, BuildContext context ) {
+    if( apodInfo['media_type'] == 'image' ) {
       return Column(
         children: <Widget>[
           Container(
@@ -28,16 +61,29 @@ class InfoPage extends StatelessWidget {
               ),
           ),
           Container(
-            height: 30.0,
+            height: 40.0,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.85)
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Icon(Icons.file_download, color: Colors.white,),
-                Icon(Icons.fullscreen, color: Colors.white,),                
+                IconButton(
+                  onPressed: (){
+                    _requestDownload(apodInfo['hdurl']);
+                  },
+                  icon: Icon(Icons.file_download, color: Colors.white,),
+                ),
+                IconButton(
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: ( context ) => FullSizePage(hdurl: apodInfo['hdurl'],)
+                    ));
+                  },
+                  icon: Icon(Icons.fullscreen, color: Colors.white,), 
+                )              
 
               ],
             ),
@@ -99,7 +145,7 @@ class InfoPage extends StatelessWidget {
                 ],
               ),
                 SizedBox(height: 15.0,),              
-              _showMediaType(apodInfo['media_type'], context),
+              _showMediaType(apodInfo, context),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 20.0),
                 padding: EdgeInsets.symmetric(horizontal: 15.0),
