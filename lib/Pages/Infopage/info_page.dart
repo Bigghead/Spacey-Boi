@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:path_provider/path_provider.dart';
-// import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -33,17 +31,15 @@ class _InfoPageState extends State<InfoPage>{
 
   @override
   initState(){
-
     super.initState();
     _apodInfo = widget.apodInfo;
     _getFavorites();
-    
   }
 
 
   Future<Null> _getFavorites() async {
     try {
-      var prefs = await _prefs;
+      var prefs     = await _prefs;
       var favorites = prefs.getStringList('favorites');
       if( favorites != null ) {
         setState(() {
@@ -53,18 +49,22 @@ class _InfoPageState extends State<InfoPage>{
         // first load won't have the prefs set 
         prefs.setStringList('favorites', []);
       }
-      print(favorites);
     } catch( e ) { print(e); }
    
   }
 
 
-  Future<Null> _addToFavorites( String url ) async {
+  Future<Null> _toggleFavorites( String url ) async {
     try {
 
-      var prefs = await _prefs;
+      var prefs     = await _prefs;
       var favorites = prefs.getStringList('favorites');
-      favorites.add(url);
+      
+      if ( favorites.contains(url) ) {
+        favorites.remove(url);
+      } else {
+        favorites.add(url);
+      }
       prefs.setStringList('favorites', favorites);
       setState(() {
               _favorites = favorites;
@@ -72,35 +72,6 @@ class _InfoPageState extends State<InfoPage>{
 
     } catch(e) { print(e); }
   }
-
-  // void _requestDownload( String url ) async {
-
-  //   var dirPath = await _findLocalPath();
-
-  //   final taskId = await FlutterDownloader.enqueue(
-  //     url: url,
-  //     savedDir: dirPath,
-  //     showNotification: true,
-  //     clickToOpenDownloadedFile: true
-  //   );
-  // }
-
-
-  // Future<String> _findLocalPath() async {
-  //   final directory = await getApplicationDocumentsDirectory();
-  //   return directory.path;
-  // }
-
-
-  // _saveDocuments( String path) {
-  //   final file = new File('$path/tasks.json');
-  //   final fileExisted = file.existsSync();
-  //   if (!fileExisted) {
-  //     file.createSync();
-  //   }
-  //   file.writeAsStringSync(json.encode(_tasks));
-  // }
-  
 
 
   Widget _showMediaType( Map _apodInfo, BuildContext context ) {
@@ -129,7 +100,7 @@ class _InfoPageState extends State<InfoPage>{
               children: <Widget>[
                 IconButton(
                   onPressed: (){
-                    _addToFavorites(_apodInfo['url']);
+                    _toggleFavorites(_apodInfo['url']);
                   },
                   icon: Icon(
                     _isFavorited(_apodInfo['url']) ? Icons.favorite : Icons.favorite_border, 
