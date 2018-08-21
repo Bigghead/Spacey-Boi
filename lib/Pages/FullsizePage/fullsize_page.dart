@@ -18,7 +18,8 @@ class FullSizePage extends StatelessWidget {
         drawer: SideDrawer(),
         body: Container(
           width: MediaQuery.of(context).size.width,
-          child: Image(
+          child: FadeInImage(
+            placeholder: AssetImage('assets/loading.gif'),
             image: NetworkImage(hdurl),
             fit: BoxFit.cover,
             height: double.infinity,

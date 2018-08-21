@@ -2,37 +2,94 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
+// import 'package:path_provider/path_provider.dart';
+// import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 import '../FullsizePage/fullsize_page.dart';
 
 import '../../UI/side_drawer.dart';
 
-class InfoPage extends StatelessWidget {
+class InfoPage extends StatefulWidget {
 
   final Map<dynamic, dynamic> apodInfo;
 
   InfoPage( { @required this.apodInfo } );
 
+  @override
+    State<StatefulWidget> createState() {
+      // TODO: implement createState
+      return _InfoPageState();
+    }
+}
 
-  void _requestDownload( String url ) async {
 
-    var dirPath = await _findLocalPath();
+class _InfoPageState extends State<InfoPage>{
+  
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  List<String> _favorites = [];
+  Map<dynamic, dynamic> _apodInfo;
 
-    final taskId = await FlutterDownloader.enqueue(
-      url: url,
-      savedDir: dirPath,
-      showNotification: true,
-      clickToOpenDownloadedFile: true
-    );
+  @override
+  initState(){
+
+    super.initState();
+    _apodInfo = widget.apodInfo;
+    _getFavorites();
+    
   }
 
 
-  Future<String> _findLocalPath() async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
+  Future<Null> _getFavorites() async {
+    try {
+      var prefs = await _prefs;
+      var favorites = prefs.getStringList('favorites');
+      if( favorites != null ) {
+        setState(() {
+                _favorites = List.from(favorites);
+              });
+      } else {
+        // first load won't have the prefs set 
+        prefs.setStringList('favorites', []);
+      }
+      print(favorites);
+    } catch( e ) { print(e); }
+   
   }
+
+
+  Future<Null> _addToFavorites( String url ) async {
+    try {
+
+      var prefs = await _prefs;
+      var favorites = prefs.getStringList('favorites');
+      favorites.add(url);
+      prefs.setStringList('favorites', favorites);
+      setState(() {
+              _favorites = favorites;
+            });
+
+    } catch(e) { print(e); }
+  }
+
+  // void _requestDownload( String url ) async {
+
+  //   var dirPath = await _findLocalPath();
+
+  //   final taskId = await FlutterDownloader.enqueue(
+  //     url: url,
+  //     savedDir: dirPath,
+  //     showNotification: true,
+  //     clickToOpenDownloadedFile: true
+  //   );
+  // }
+
+
+  // Future<String> _findLocalPath() async {
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   return directory.path;
+  // }
 
 
   // _saveDocuments( String path) {
@@ -46,15 +103,15 @@ class InfoPage extends StatelessWidget {
   
 
 
-  Widget _showMediaType( Map apodInfo, BuildContext context ) {
-    if( apodInfo['media_type'] == 'image' ) {
+  Widget _showMediaType( Map _apodInfo, BuildContext context ) {
+    if( _apodInfo['media_type'] == 'image' ) {
       return Column(
         children: <Widget>[
           Container(
             height: MediaQuery.of(context).size.height * 0.5,
             width: MediaQuery.of(context).size.width,
             child: Image(
-              image: NetworkImage(apodInfo['url']),
+              image: NetworkImage(_apodInfo['url']),
               fit: BoxFit.cover,
               height: double.infinity,
               width: double.infinity,
@@ -72,14 +129,17 @@ class InfoPage extends StatelessWidget {
               children: <Widget>[
                 IconButton(
                   onPressed: (){
-                    _requestDownload(apodInfo['hdurl']);
+                    _addToFavorites(_apodInfo['url']);
                   },
-                  icon: Icon(Icons.file_download, color: Colors.white,),
+                  icon: Icon(
+                    _isFavorited(_apodInfo['url']) ? Icons.favorite : Icons.favorite_border, 
+                    color: Colors.white,
+                  ),
                 ),
                 IconButton(
                   onPressed: (){
                     Navigator.push(context, MaterialPageRoute(
-                      builder: ( context ) => FullSizePage(hdurl: apodInfo['hdurl'],)
+                      builder: ( context ) => FullSizePage(hdurl: _apodInfo['url'],)
                     ));
                   },
                   icon: Icon(Icons.fullscreen, color: Colors.white,), 
@@ -96,12 +156,17 @@ class InfoPage extends StatelessWidget {
           Text('No Image Available'),
           SizedBox(height: 10.0,),
           RaisedButton(
-            onPressed: () { _launchBrowser(apodInfo['url']); },
+            onPressed: () { _launchBrowser(_apodInfo['url']); },
             child: Text('Launch video in browser'),
           ),
         ],
       );
     }
+  }
+
+
+  bool _isFavorited( String url ) {
+    return _favorites.contains(url);
   }
 
 
@@ -131,7 +196,7 @@ class InfoPage extends StatelessWidget {
               Container( 
                 margin: EdgeInsets.symmetric(vertical: 15.0),
                 alignment: Alignment.center,
-                child:Text(apodInfo['title'], style: TextStyle(
+                child:Text(_apodInfo['title'], style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18.0,
                   fontFamily: 'Oswald'
@@ -140,16 +205,16 @@ class InfoPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
-                  Text(apodInfo['date']),
-                  apodInfo['copyright'] != null ? Text(apodInfo['copyright']) : Text(''),
+                  Text(_apodInfo['date']),
+                  _apodInfo['copyright'] != null ? Text(_apodInfo['copyright']) : Text(''),
                 ],
               ),
                 SizedBox(height: 15.0,),              
-              _showMediaType(apodInfo, context),
+              _showMediaType(_apodInfo, context),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 20.0),
                 padding: EdgeInsets.symmetric(horizontal: 15.0),
-                child: Text(apodInfo['explanation'], style: TextStyle(
+                child: Text(_apodInfo['explanation'], style: TextStyle(
                   fontSize: 16.0,
                   fontFamily: 'Oswald',
                   // fontWeight: FontWeight.w400
