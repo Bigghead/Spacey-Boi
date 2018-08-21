@@ -15,15 +15,34 @@ class InfoPage extends StatelessWidget {
 
   Widget _showMediaType( String media, BuildContext context ) {
     if( media == 'image' ) {
-      return Container(
-        height: MediaQuery.of(context).size.height * 0.5,
-        width: MediaQuery.of(context).size.width,
-        child: Image(
-          image: NetworkImage(apodInfo['url']),
-          fit: BoxFit.cover,
-          height: double.infinity,
-          width: double.infinity,
+      return Column(
+        children: <Widget>[
+          Container(
+            height: MediaQuery.of(context).size.height * 0.5,
+            width: MediaQuery.of(context).size.width,
+            child: Image(
+              image: NetworkImage(apodInfo['url']),
+              fit: BoxFit.cover,
+              height: double.infinity,
+              width: double.infinity,
+              ),
           ),
+          Container(
+            height: 30.0,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.85)
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Icon(Icons.file_download, color: Colors.white,),
+                Icon(Icons.fullscreen, color: Colors.white,),                
+
+              ],
+            ),
+          )
+        ],
       );
     } else {
       return Column(
@@ -57,12 +76,20 @@ class InfoPage extends StatelessWidget {
           backgroundColor: Colors.black.withOpacity(0.85),
         ),
         drawer: SideDrawer(),
-        body: Center(
+        body: Container(
+          decoration: BoxDecoration(
+            color: Color(int.parse('#f9ebe0'.substring(1, 7), radix: 16) + 0xFF000000)
+          ),
           child: ListView(
             children: <Widget>[
               Container( 
+                margin: EdgeInsets.symmetric(vertical: 15.0),
                 alignment: Alignment.center,
-                child:Text(apodInfo['title']),
+                child:Text(apodInfo['title'], style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.0,
+                  fontFamily: 'Oswald'
+                ),),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -71,11 +98,16 @@ class InfoPage extends StatelessWidget {
                   apodInfo['copyright'] != null ? Text(apodInfo['copyright']) : Text(''),
                 ],
               ),
+                SizedBox(height: 15.0,),              
               _showMediaType(apodInfo['media_type'], context),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 20.0),
                 padding: EdgeInsets.symmetric(horizontal: 15.0),
-                child: Text(apodInfo['explanation'])
+                child: Text(apodInfo['explanation'], style: TextStyle(
+                  fontSize: 16.0,
+                  fontFamily: 'Oswald',
+                  // fontWeight: FontWeight.w400
+                ),)
               )
             ],
           ),

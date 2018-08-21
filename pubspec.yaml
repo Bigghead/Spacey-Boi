@@ -50,6 +50,9 @@ flutter:
     - family: Merriweather
       fonts:
         - asset: assets/fonts/Merriweather-BoldItalic.ttf
+    - family: Oswald
+      fonts:
+        - asset: assets/fonts/Oswald-Regular.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
