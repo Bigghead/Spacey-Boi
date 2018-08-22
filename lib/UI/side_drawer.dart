@@ -1,6 +1,43 @@
 import 'package:flutter/material.dart';
 
+import '../Pages/Homepage/homepage.dart';
+import '../Pages/FavoritePage/favorite_page.dart';
+
 class SideDrawer extends StatelessWidget {
+
+
+  List<Widget> _buildDrawerChildren(context) {
+    final List<Map> children = [
+      { 'icon': Icons.home, 'text': 'Home', 'navigate': HomePage() },
+      { 'icon': Icons.favorite, 'text': 'Favorites', 'navigate': FavoritePage() },
+      // { 'icon': 'home', 'text': 'Home' },      
+    ];
+
+    return children.map( (f) {
+      return Container(
+        margin: EdgeInsets.symmetric(vertical: 5.0),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) => f['navigate']
+            ));
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: Icon(f['icon'], color: Colors.white,),
+              ),
+              Expanded(
+                child: Text(f['text'], style: TextStyle(color: Colors.white),),
+              ),
+            ],
+          ),
+        ),
+      );
+    }).toList();
+  }
+
 
   @override
     Widget build(BuildContext context) {
@@ -22,18 +59,9 @@ class SideDrawer extends StatelessWidget {
                   )
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 20.0),
+                  margin: EdgeInsets.only(top: 25.0),
                   child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.home, color: Colors.white,),
-                          SizedBox(width: 5.0,),
-                          Text('Home', style: TextStyle(color: Colors.white),)
-                        ],
-                      )
-                    ],
+                    children: _buildDrawerChildren(context)
                   ),
                 )
               ],
