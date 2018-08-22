@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Store/gallery_image_store.dart';
 
@@ -32,6 +33,7 @@ class _GalleryState extends State<GalleryViewPage> {
     void initState() {
       // TODO: implement initState
       _getDates();
+      // _clearPrefs();
       super.initState();
     }
 
@@ -40,6 +42,11 @@ class _GalleryState extends State<GalleryViewPage> {
       dates.add(getDate(i));
     }
   }
+
+  // Future<Null> _clearPrefs() async {
+  //   var prefs = await SharedPreferences.getInstance();
+  //   await prefs.clear();
+  // }
 
   Widget _getPictureFromModel( GalleryData store, String date ) {
     Map data = store.getData(date);
