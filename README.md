@@ -1,8 +1,9 @@
-# spacey_boi
+<h1 align="center">Spacey Boi ( work in progress )</h1>
 
-A new Flutter project.
 
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+<h3 align="center">Screenshots:</h3>
+<div align="center">
+  <img src="Screenshots/Spacey_boi.png" height="500"/>
+  <img src="Screenshots/Spacey_boi(1).png" height="500"/>
+  
+</div>
