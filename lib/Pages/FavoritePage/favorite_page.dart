@@ -44,29 +44,69 @@ class _FavoritePageState extends State<FavoritePage> {
   }  
 
 
+    Future<Null> _toggleFavorites( String url ) async {
+    try {
+
+      var prefs     = await _prefs;
+      var favorites = prefs.getStringList('favorites');
+      
+      if ( favorites.contains(url) ) {
+        favorites.remove(url);
+      } else {
+        favorites.add(url);
+      }
+      prefs.setStringList('favorites', favorites);
+      setState(() {
+              _favorites = favorites;
+            });
+
+    } catch(e) { print(e); }
+  }
+
+
+  bool _isFavorited(String url ) {
+    return _favorites.contains(url);
+  }
+
+
   Widget _renderFavoriteImages() {
     return CarouselSlider(
-  items: _favorites.map((i) {
-    return new Builder(
-      builder: (BuildContext context) {
-        return new Container(
-          margin: new EdgeInsets.all(5.0),
-          child: new ClipRRect(
-            borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
-              child: Image(
-                image: NetworkImage(i),
-                fit: BoxFit.cover,
-                width: 1000.0,
-            )
-          )
+      items: _favorites.map((i) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Container(
+              margin: EdgeInsets.only(top: 10.0, bottom: 5.0, left: 5.0, right: 5.0),
+              child: Column(
+                children: <Widget>[
+                Expanded(
+                  child: ClipRRect(
+                  borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+                    child: Image(
+                      image: NetworkImage(i),
+                      fit: BoxFit.cover,
+                      width: 1000.0,
+                  )
+                ),
+                ),
+                Container(
+                  height: 40.0,
+                  decoration: BoxDecoration(
+                  ),
+                  child: IconButton(
+                    onPressed: () => _toggleFavorites(i),
+                    icon: Icon(_isFavorited(i) ? Icons.favorite : Icons.favorite_border),
+                  )
+                )
+                ],
+              )
+            );
+          },
         );
-      },
-    );
-  }).toList(),
-  viewportFraction: 0.8,
-  height: MediaQuery.of(context).size.height * 0.8,
-  autoPlay: false,
-  reverse: false,
+      }).toList(),
+      viewportFraction: 0.8,
+      height: MediaQuery.of(context).size.height * 0.8,
+      autoPlay: false,
+      reverse: false,
 );
   }
 
