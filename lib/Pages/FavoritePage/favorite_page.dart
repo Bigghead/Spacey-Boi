@@ -119,6 +119,9 @@ class _FavoritePageState extends State<FavoritePage> {
         ),
         drawer: SideDrawer(),
         body: Container(
+          decoration: BoxDecoration(
+            color: Color(int.parse('#f9ebe0'.substring(1, 7), radix: 16) + 0xFF000000)
+          ),
           child: _favorites.isEmpty 
             ? Center(child: Text('You have no pictures in your favorites'),)
             : Center(
