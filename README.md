@@ -23,5 +23,5 @@
 - [ x ] Read more info about current picture
 - [ x ] Store list of favorite images
 - [ x ] Show favorite images
-- [  ] Get picture from date
+- [ ] Get picture from date
 - [ ] Profit??

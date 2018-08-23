@@ -65,6 +65,9 @@ class _GalleryState extends State<GalleryViewPage> {
       try {
         final http.Response response = await http.get('https://api.nasa.gov/planetary/apod?date=${date}&api_key=${api_key}');
         final Map data = await json.decode(response.body);
+        if( data['url'].contains('.gif') ) {
+          data['url'] = 'https://imgplaceholder.com/420x320/cccccc/757575/glyphicon-picture';
+        }
         store.addData(date, data);
         return data;
       } catch(e) { 
