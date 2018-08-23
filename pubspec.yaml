@@ -9,6 +9,7 @@ dependencies:
   url_launcher: ^3.0.3
   scoped_model: ^0.3.0
   shared_preferences: ^0.4.2
+  carousel_slider: ^0.0.6
   #path_provider: ^0.4.1
   #flutter_downloader: ^0.1.0
 

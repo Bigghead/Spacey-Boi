@@ -17,7 +17,7 @@ class SideDrawer extends StatelessWidget {
 
     return children.map( (f) {
       return Container(
-        margin: EdgeInsets.symmetric(vertical: 5.0),
+        margin: EdgeInsets.symmetric(vertical: 10.0),
         child: GestureDetector(
           onTap: () {
             Navigator.push(context, MaterialPageRoute(
@@ -61,7 +61,7 @@ class SideDrawer extends StatelessWidget {
                   )
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 25.0),
+                  margin: EdgeInsets.only(top: 30.0),
                   child: Column(
                     children: _buildDrawerChildren(context)
                   ),

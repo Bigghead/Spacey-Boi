@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+
 
 import '../../UI/side_drawer.dart';
 
@@ -42,6 +44,32 @@ class _FavoritePageState extends State<FavoritePage> {
   }  
 
 
+  Widget _renderFavoriteImages() {
+    return CarouselSlider(
+  items: _favorites.map((i) {
+    return new Builder(
+      builder: (BuildContext context) {
+        return new Container(
+          margin: new EdgeInsets.all(5.0),
+          child: new ClipRRect(
+            borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+              child: Image(
+                image: NetworkImage(i),
+                fit: BoxFit.cover,
+                width: 1000.0,
+            )
+          )
+        );
+      },
+    );
+  }).toList(),
+  viewportFraction: 0.8,
+  height: MediaQuery.of(context).size.height * 0.8,
+  autoPlay: false,
+  reverse: false,
+);
+  }
+
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
@@ -54,9 +82,7 @@ class _FavoritePageState extends State<FavoritePage> {
           child: _favorites.isEmpty 
             ? Center(child: Text('You have no pictures in your favorites'),)
             : Center(
-              child: Column(
-                children: _favorites.map((f) => Text(f)).toList(),
-              ),
+              child: _renderFavoriteImages(),
             ),
         ),
       );
