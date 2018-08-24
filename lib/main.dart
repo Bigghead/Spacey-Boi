@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
       return ScopedModel<GalleryData>(
         model: GalleryData(),
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
         routes: {
           '/': ( BuildContext context ) => HomePage(),
         },

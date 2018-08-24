@@ -21,7 +21,7 @@ class ImageContainer extends StatelessWidget {
               width: double.infinity,
               // alignment: Alignment.center,
             )
-            : Image(image: NetworkImage('https://imgplaceholder.com/420x320/ffffff/000000?text=Video+Image'),),
+            : Image(image: NetworkImage('https://imgplaceholder.com/420x320/f9ebe0/4c4747/glyphicon-facetime-video'),),
       );
     }
 }

@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:scoped_model/scoped_model.dart';
+import 'package:sticky_headers/sticky_headers.dart';
+
 // import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Store/gallery_image_store.dart';
@@ -66,7 +68,7 @@ class _GalleryState extends State<GalleryViewPage> {
         final http.Response response = await http.get('https://api.nasa.gov/planetary/apod?date=${date}&api_key=${api_key}');
         final Map data = await json.decode(response.body);
         if( data['url'].contains('.gif') ) {
-          data['url'] = 'https://imgplaceholder.com/420x320/cccccc/757575/glyphicon-picture';
+          data['url'] = 'https://imgplaceholder.com/420x320/f9ebe0/4c4747?text=Image+Not+Found';
         }
         store.addData(date, data);
         return data;
@@ -88,7 +90,26 @@ class _GalleryState extends State<GalleryViewPage> {
                   builder: (context) => InfoPage(apodInfo: snapshot.data,)
                 ));
               },
-              child: ImageContainer(data: snapshot.data,),
+              child: Material(
+                color: Colors.grey[300],
+                child: StickyHeaderBuilder(
+                  overlapHeaders: true,
+                  builder: (BuildContext context, double stuckAmount) {
+						      	stuckAmount = 1.0 - stuckAmount.clamp(0.0, 1.0);
+						      	return new Container(
+						      		height: 50.0,
+						      		color: Colors.grey[900].withOpacity(0.6 + stuckAmount * 0.4),
+						      		padding: new EdgeInsets.symmetric(horizontal: 16.0),
+						      		alignment: Alignment.centerLeft,
+						      		child: new Text('Hello',
+						      			style: const TextStyle(color: Colors.white),
+						      		),
+						      	);
+						      },
+                  content: ImageContainer(data: snapshot.data,),
+                ),
+              ),
+              // child: ImageContainer(data: snapshot.data,),
             )
             : Image(image: AssetImage('assets/loading.gif'));
      },
