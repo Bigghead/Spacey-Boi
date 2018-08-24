@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-
 
 import '../../UI/side_drawer.dart';
 
@@ -82,7 +82,7 @@ class _FavoritePageState extends State<FavoritePage> {
                   child: ClipRRect(
                   borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
                     child: Image(
-                      image: NetworkImage(i),
+                      image: CachedNetworkImageProvider(i),
                       fit: BoxFit.cover,
                       width: 1000.0,
                   )

@@ -12,7 +12,6 @@ import '../../Store/gallery_image_store.dart';
 import './gallery_image.dart';
 import '../Infopage/info_page.dart';
 import '../../UI/side_drawer.dart';
-import '../../UI/image_container.dart';
 
 import '../../keys.dart';
 import '../../utils.dart';
@@ -40,7 +39,7 @@ class _GalleryState extends State<GalleryViewPage> {
     }
 
   void _getDates() {
-    for( var i = 0 ; i < 60; i ++ ) {
+    for( var i = 0 ; i < 90; i ++ ) {
       dates.add(getDate(i));
     }
   }
