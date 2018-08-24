@@ -17,15 +17,19 @@ class GalleryImage extends StatelessWidget {
                 child: StickyHeaderBuilder(
                   overlapHeaders: true,
                   builder: (BuildContext context, double stuckAmount) {
-						      	stuckAmount = 1.0 - stuckAmount.clamp(0.0, 1.0);
-						      	return new Container(
+						      	return Container(
 						      		height: 50.0,
-						      		color: Colors.grey[900].withOpacity(0.6 + stuckAmount * 0.4),
-						      		padding: new EdgeInsets.symmetric(horizontal: 16.0),
+						      		color: Colors.black.withOpacity(0.35),
 						      		alignment: Alignment.centerLeft,
-						      		child: new Text(data['title'],
-						      			style: const TextStyle(color: Colors.white),
+						      		child: Center(
+                        child: Text(data['title'],
+						      			style: TextStyle(
+                          fontSize: 16.0,
+                          color: Colors.white,
+                          fontFamily: 'Oswald'
+                        ),
 						      		),
+                      ),
 						      	);
 						      },
                   content: ImageContainer(data: data,),
