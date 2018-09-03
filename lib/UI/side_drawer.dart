@@ -1,10 +1,17 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 
 import '../Pages/Homepage/homepage.dart';
 import '../Pages/GalleryViewPage/gallery_view_page.dart';
 import '../Pages/FavoritePage/favorite_page.dart';
+import '../Pages/Infopage/info_page.dart';
+
+import '../keys.dart';
 
 class SideDrawer extends StatelessWidget {
 
@@ -43,6 +50,26 @@ class SideDrawer extends StatelessWidget {
   }
 
 
+  Future<Null> _getDate( BuildContext context, DateTime date ) async {
+
+   try {
+
+      if( date != null ) {
+        DateFormat formatted = DateFormat('yyyy-MM-dd');
+        String url = 'https://api.nasa.gov/planetary/apod?date=${formatted.format(date)}&api_key=${api_key}';
+
+        http.Response response = await http.get(url);
+        final Map data = await json.decode(response.body);
+        Navigator.push(context, MaterialPageRoute(
+          builder: ( BuildContext context ) => InfoPage(apodInfo: data,)
+        ));
+      }
+
+   } catch (e) { print(e); }
+    
+  }
+
+
   @override
     Widget build(BuildContext context) {
       // TODO: implement build
@@ -71,12 +98,11 @@ class SideDrawer extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             showDatePicker(
-                                  context: context,
-                                  initialDate: new DateTime.now(),
-                                  firstDate:
-                                      new DateTime.now().subtract(new Duration(days: 30)),
-                                  lastDate: new DateTime.now().add(new Duration(days: 30)),
-                            ).then((date) => print(DateFormat('yyyy-MM-dd').format(date)));
+                                  context    : context,
+                                  initialDate: DateTime.now(),
+                                  firstDate  : DateTime.now().subtract(new Duration(days: 30 * 12)),
+                                  lastDate   : DateTime.now(),
+                            ).then((date) => _getDate(context, date));
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
